@@ -1,0 +1,53 @@
+  <div id="my_camera">
+    
+  </div>
+  <div class="btn-camera">
+    <button class="btn btn-primary">
+      <span class="glyphicon glyphicon-camera"></span>
+    </button>
+  </div>
+<script language="JavaScript">
+    Webcam.set({
+      width: 1280,
+      height: 720,
+      image_format: 'jpeg',
+      jpeg_quality: 90
+    });
+    Webcam.attach( '#my_camera' );
+  </script>
+  <!-- Code to handle taking the snapshot and displaying it locally -->
+  <script language="JavaScript">
+    function take_snapshot() {
+      // take snapshot and get image data
+      Webcam.snap( function(datauri) {
+        // display results in page
+        /*document.getElementById('results').innerHTML = 
+          '<h2>Here is your large image:</h2>' + 
+          '<img src="'+data_uri+'"/>';*/
+          console.log(datauri);
+
+          $.ajax({
+            type: 'POST',
+            url:'api/fotos',
+            data:{datauri:datauri,tag:'#prueba',evento:'evento de prueba'},
+            success:function(data){
+                console.log(data);
+            },
+            error:function() {
+                console.error(arguments);
+            }
+          });
+
+      } );
+    }
+
+    $('body').keyup(function(event) {
+      take_snapshot();
+      console.log(event.keyCode);
+      return false;
+    });
+
+   $('.btn-camera button').click(function(event){
+        take_snapshot()
+   });
+  </script>
