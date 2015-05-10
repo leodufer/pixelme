@@ -21,11 +21,11 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/cam', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/pixel', {
+      .when('/', {
         templateUrl: 'views/pixel.html',
         controller: 'PixelCtrl'
       })

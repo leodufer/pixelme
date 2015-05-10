@@ -1,30 +1,84 @@
 <br>
 <br>
 <br>
+<style type="text/css">
+    .col-centered img{
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .centro{
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
 <div class="container" id="galeria">
-	
+	<div class="row" id="load" style="display:none">
+        <div class="col-xs-9 col-centered">
+           <img class="img-responsive" src="images/loading.gif">
+        </div>
+    </div>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="centro">
+             <a href="#">Cargar Más</a>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
+
+
+
 	var panel;
 	$.get('template/panel.html',function (data) {
 		panel = data;
-
+        $('#load').show();
 		$.ajax({
             type: 'GET',
             url:'api/fotos',
             success:function(data){
-                for (var i = data.length - 1; i >= 0; i--) {
+                for (var i =0; i < data.length ; i++) {
                 	var dato = data[i];
                 	var panelObj = $(panel);
                 	panelObj.find('#myfoto img').attr('src',dato.datauri);
+                    panelObj.find('#evento span').append(dato.tag);
                 	$('#galeria').append(panelObj);
                 };
             },
             error:function() {
                 console.error(arguments);
             }
+          }).done(function(){
+             $('#load').hide();
           });
-	})
+	});
+    var page = 1;
+
+    $('a').click(function(event){
+        event.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url:'api/fotos/'+page,
+            success:function(data){
+                for (var i =0; i < data.length ; i++) {
+                    var dato = data[i];
+                    var panelObj = $(panel);
+                    panelObj.find('#myfoto img').attr('src',dato.datauri);
+                    panelObj.find('#evento span').append(dato.tag);
+                    $('#galeria').append(panelObj);
+                };
+                page++;
+            },
+            error:function() {
+                console.error(arguments);
+            }
+          }).done(function(){
+             $('#load').hide();
+          });
+    });
+
 
 
 </script>
